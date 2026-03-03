@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Urna Eletrônica</title>
+
+<style>
+body{
+    text-align:center;
+    font-family:Arial;
+    background:#f4f4f4;
+}
+
+/* Container da urna */
+.urna-container{
+    position:relative;
+    display:inline-block;
+}
+
+/* Tela preta da urna */
+.tela{
+    position:absolute;
+    top:18%;
+    left:5.5%;
+    width:51%;
+    height:56%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.tela img{
+    width:100%;
+    height:100%;
+    object-fit:fill; /* estica sem cortar */
+}
+
+/* Barra branca */
+#barra{
+    margin-top:15px;
+    width:300px;
+    height:50px;
+    font-size:24px;
+    text-align:center;
+}
+
+/* Botão votar */
+#votarBtn{
+    display:none;
+    margin-top:20px;
+    padding:10px 30px;
+    font-size:20px;
+    background:green;
+    color:white;
+    border:none;
+    cursor:pointer;
+}
+
+/* Contador */
+#contador{
+    display:none;
+    font-size:20px;
+    margin-bottom:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div id="contador"></div>
+
+<button id="votarBtn">Votar</button>
+
+<div class="urna-container">
+    <img src="Urna.jpg" width="500">
+    <div class="tela" id="tela"></div>
+</div>
+
+<br>
+
+<input type="number" id="barra" placeholder="Digite o número">
+
+<script>
+const barra = document.getElementById("barra");
+const tela = document.getElementById("tela");
+const votarBtn = document.getElementById("votarBtn");
+const contador = document.getElementById("contador");
+
+// Pega votos salvos
+let votos67 = localStorage.getItem("votos67");
+votos67 = votos67 ? parseInt(votos67) : 0;
+
+// Verifica se já votou
+let jaVotou = localStorage.getItem("jaVotou");
+
+// Atualiza contador
+contador.innerText = "Votos: " + votos67;
+
+barra.addEventListener("input", function(){
+
+    let valor = barra.value;
+
+    if(valor === "67"){
+
+        tela.innerHTML = '<img src="67.png">';
+        contador.style.display = "block";
+        votarBtn.style.display = jaVotou ? "none" : "inline-block";
+
+    } else {
+
+        tela.innerHTML = "";
+        votarBtn.style.display = "none";
+        contador.style.display = "none";
+    }
+
+});
+
+votarBtn.addEventListener("click", function(){
+
+    if(jaVotou){
+        alert("Você já votou!");
+        return;
+    }
+
+    if(barra.value === "67"){
+
+        votos67++;
+        localStorage.setItem("votos67", votos67);
+        localStorage.setItem("jaVotou", "sim");
+
+        contador.innerText = "Votos: " + votos67;
+        votarBtn.style.display = "none";
+        jaVotou = "sim";
+
+        alert("Voto confirmado!");
+    }
+
+});
+</script>
+
+</body>
+</html>
